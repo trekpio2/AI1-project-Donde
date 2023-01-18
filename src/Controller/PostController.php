@@ -2,17 +2,17 @@
 namespace App\Controller;
 
 use App\Exception\NotFoundException;
-use App\Model\Building;
+use App\Model\Post;
 use App\Service\Router;
 use App\Service\Templating;
 
-class MapController
+class PostController
 {
     public function indexAction(Templating $templating, Router $router): ?string
     {
-        $buildings = Building::findAll();
-        $html = $templating->render('building/index.html.php', [
-            'buildings' => $buildings,
+        $posts = Post::findAll();
+        $html = $templating->render('post/index.html.php', [
+            'posts' => $posts,
             'router' => $router,
         ]);
         return $html;
@@ -63,17 +63,15 @@ class MapController
         return $html;
     }
 
-    public function showAction(int $buildingId, Templating $templating, Router $router): ?string
+    public function showAction(int $postId, Templating $templating, Router $router): ?string
     {
-        $buildings = Building::findAll();
-        $building = Building::find($buildingId);
-        if (! $building) {
-            throw new NotFoundException("Missing post with id $buildingId");
+        $post = Post::find($postId);
+        if (! $post) {
+            throw new NotFoundException("Missing post with id $postId");
         }
 
-        $html = $templating->render('building/show.html.php', [
-            'buildings' => $buildings,
-            'building' => $building,
+        $html = $templating->render('post/show.html.php', [
+            'post' => $post,
             'router' => $router,
         ]);
         return $html;

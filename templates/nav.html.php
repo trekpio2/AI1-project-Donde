@@ -1,10 +1,13 @@
 <?php
 /** @var $router \App\Service\Router */
+/** @var \App\Model\Building[] $buildings */
 
 ?>
 <ul>
-    <li><a href="<?= $router->generatePath('') ?>">Home</a></li>
+    <?php foreach ($buildings as $building): ?>
+            <li><a href="<?= $router->generatePath('building-show', ['id' => $building->getId()]) ?>"> <?= $building->getName() ?> </a></li>
+    <?php endforeach; ?>
+    <li><a href="<?= $router->generatePath('building-index') ?>">Home</a></li>
     <li><a href="<?= $router->generatePath('post-index') ?>">Posts</a></li>
-    <li><a href="<?= $router->generatePath('contact-index') ?>">Contacts</a></li>
 </ul>
 <?php

@@ -8,9 +8,10 @@ $router = new \App\Service\Router();
 
 $action = $_REQUEST['action'] ?? null;
 switch ($action) {
-    case 'post-index':
+    case 'building-index':
     case null:
-        $controller = new \App\Controller\PostController();
+        //$controller = new \App\Controller\PostController();
+        $controller = new \App\Controller\MapController();
         $view = $controller->indexAction($templating, $router);
         break;
     case 'post-create':
@@ -24,11 +25,11 @@ switch ($action) {
         $controller = new \App\Controller\PostController();
         $view = $controller->editAction($_REQUEST['id'], $_REQUEST['post'] ?? null, $templating, $router);
         break;
-    case 'post-show':
+    case 'building-show':
         if (! $_REQUEST['id']) {
             break;
         }
-        $controller = new \App\Controller\PostController();
+        $controller = new \App\Controller\MapController();
         $view = $controller->showAction($_REQUEST['id'], $templating, $router);
         break;
     case 'post-delete':
