@@ -6,31 +6,31 @@ use App\Service\Config;
 class Schedule
 {
     private ?string $date = null;
-    private ?string $hour = null;
-    private ?int $roomId = null;
-    private ?int $lessonId = null;
+    private ?string $time = null;
+    private ?int $id_room = null;
+    private ?int $id_lesson = null;
 
 
     public function getRoomId(): ?int
     {
-        return $this->roomId;
+        return $this->id_room;
     }
 
-    public function setRoomId(?int $roomId): Schedule
+    public function setRoomId(?int $id_room): Schedule
     {
-        $this->roomId = $roomId;
+        $this->id_room = $id_room;
 
         return $this;
     }
 
     public function getLessonId(): ?int
     {
-        return $this->lessonId;
+        return $this->id_lesson;
     }
 
-    public function setLessonId(?int $lessonId): Schedule
+    public function setLessonId(?int $id_lesson): Schedule
     {
-        $this->lessonId = $lessonId;
+        $this->id_lesson = $id_lesson;
 
         return $this;
     }
@@ -47,14 +47,14 @@ class Schedule
         return $this;
     }
 
-    public function getHour(): ?string
+    public function getTime(): ?string
     {
-        return $this->hour;
+        return $this->time;
     }
 
-    public function setHour(?string $hour): Schedule
+    public function setTime(?string $time): Schedule
     {
-        $this->hour = $hour;
+        $this->time = $time;
 
         return $this;
     }
@@ -69,17 +69,17 @@ class Schedule
 
     public function fill($array): Schedule
     {
-        if (isset($array['roomId'])) {
-            $this->setRoomId($array['roomId']);
+        if (isset($array['id_room'])) {
+            $this->setRoomId($array['id_room']);
         }
-        if (isset($array['lessonId'])) {
-            $this->setLessonId($array['lessonId']);
+        if (isset($array['id_lesson'])) {
+            $this->setLessonId($array['id_lesson']);
         }
         if (isset($array['date'])) {
             $this->setDate($array['date']);
         }
-        if (isset($array['hour'])) {
-            $this->setHour($array['hour']);
+        if (isset($array['time'])) {
+            $this->setTime($array['time']);
         }
 
         return $this;
@@ -121,23 +121,23 @@ class Schedule
     {
         $pdo = new \PDO(Config::get('db_dsn'), Config::get('db_user'), Config::get('db_pass'));
         if (! $this->getRoomId()) {
-            $sql = "INSERT INTO schedule (roomId, lessonId, date, hour) VALUES (:roomId, :lessonId, :date, :hour)";
+            $sql = "INSERT INTO schedule (id_room, id_lesson, date, time) VALUES (:id_room, :id_lesson, :date, :time)";
             $statement = $pdo->prepare($sql);
             $statement->execute([
-                ':roomId' => $this->getRoomId(),
-                ':lessonId' => $this->getLessonId(),
+                ':id_room' => $this->getRoomId(),
+                ':id_lesson' => $this->getLessonId(),
                 ':date' => $this->getdate(),
-                ':hour' => $this->getHour(),
+                ':time' => $this->getTime(),
                 
             ]);
         } else {
-            $sql = "UPDATE schedule SET roomId = :roomId, lessonId = :lessonId, date = :date, hour = :hour WHERE roomId = :roomId AND lessonId = :lessonId";
+            $sql = "UPDATE schedule SET id_room = :id_room, id_lesson = :id_lesson, date = :date, time = :time WHERE id_room = :id_room AND id_lesson = :id_lesson";
             $statement = $pdo->prepare($sql);
             $statement->execute([
-                ':roomId' => $this->getRoomId(),
-                ':lessonId' => $this->getLessonId(),
+                ':id_room' => $this->getRoomId(),
+                ':id_lesson' => $this->getLessonId(),
                 ':date' => $this->getdate(),
-                ':hour' => $this->getHour(),
+                ':time' => $this->getTime(),
             ]);
         }
     }
@@ -145,16 +145,16 @@ class Schedule
     public function delete(): void
     {
         $pdo = new \PDO(Config::get('db_dsn'), Config::get('db_user'), Config::get('db_pass'));
-        $sql = "DELETE FROM schedule WHERE roomId = :roomId AND lessonId = :lessonId";
+        $sql = "DELETE FROM schedule WHERE id_room = :id_room AND id_lesson = :id_lesson";
         $statement = $pdo->prepare($sql);
         $statement->execute([
-            ':roomId' => $this->getRoomId(),
-            ':lessonId' => $this->getLessonId(),
+            ':id_room' => $this->getRoomId(),
+            ':id_lesson' => $this->getLessonId(),
         ]);
 
         $this->setRoomId(null);
         $this->setLessonId(null);
         $this->setdate(null);
-        $this->setHour(null);
+        $this->setTime(null);
     }
 }

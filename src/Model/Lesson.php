@@ -7,7 +7,7 @@ class Lesson
 {
     private ?int $id = null;
     private ?string $name = null;
-    private ?int $workerId = null;
+    private ?int $id_worker = null;
 
 
     public function getId(): ?int
@@ -36,12 +36,12 @@ class Lesson
 
     public function getWorkerId(): ?int
     {
-        return $this->workerId;
+        return $this->id_worker;
     }
 
-    public function setWorkerId(?int $workerId): Lesson
+    public function setWorkerId(?int $id_worker): Lesson
     {
-        $this->workerId = $workerId;
+        $this->id_worker = $id_worker;
 
         return $this;
     }
@@ -62,8 +62,8 @@ class Lesson
         if (isset($array['name'])) {
             $this->setName($array['name']);
         }
-        if (isset($array['workerId'])) {
-            $this->setWorkerId($array['workerId']);
+        if (isset($array['id_worker'])) {
+            $this->setWorkerId($array['id_worker']);
         }
 
         return $this;
@@ -105,21 +105,21 @@ class Lesson
     {
         $pdo = new \PDO(Config::get('db_dsn'), Config::get('db_user'), Config::get('db_pass'));
         if (! $this->getId()) {
-            $sql = "INSERT INTO lesson (name, workerId,) VALUES (:name, :workerId)";
+            $sql = "INSERT INTO lesson (name, id_worker,) VALUES (:name, :id_worker)";
             $statement = $pdo->prepare($sql);
             $statement->execute([
                 ':name' => $this->getName(),
-                ':workerId' => $this->getWorkerId(),
+                ':id_worker' => $this->getWorkerId(),
  
             ]);
 
             $this->setId($pdo->lastInsertId());
         } else {
-            $sql = "UPDATE lesson SET name = :name, workerId = :workerId WHERE id = :id";
+            $sql = "UPDATE lesson SET name = :name, z = :id_worker WHERE id = :id";
             $statement = $pdo->prepare($sql);
             $statement->execute([
                 ':name' => $this->getName(),
-                ':workerId' => $this->getWorkerId(),
+                ':id_worker' => $this->getWorkerId(),
                 ':id' => $this->getId(),
             ]);
         }

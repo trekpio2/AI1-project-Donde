@@ -6,10 +6,10 @@ use App\Service\Config;
 class Room
 {
     private ?int $id = null;
-    private ?int $buildingId = null;
+    private ?int $id_building = null;
     private ?string $number = null;
     private ?string $floor = null;
-    private ?string $roomType = null;
+    private ?string $type = null;
 
 
     public function getId(): ?int
@@ -26,12 +26,12 @@ class Room
 
     public function getBuildingId(): ?int
     {
-        return $this->buildingId;
+        return $this->id_building;
     }
 
-    public function setBuildingId(?int $buildingId): Room
+    public function setBuildingId(?int $id_building): Room
     {
-        $this->buildingId = $buildingId;
+        $this->id_building = $id_building;
 
         return $this;
     }
@@ -60,14 +60,14 @@ class Room
         return $this;
     }
 
-    public function getRoomType(): ?string
+    public function getType(): ?string
     {
-        return $this->roomType;
+        return $this->type;
     }
 
-    public function setRoomType(?string $roomType): Room
+    public function setType(?string $type): Room
     {
-        $this->roomType = $roomType;
+        $this->type = $type;
 
         return $this;
     }
@@ -85,8 +85,8 @@ class Room
         if (isset($array['id']) && ! $this->getId()) {
             $this->setId($array['id']);
         }
-        if (isset($array['buildingId'])) {
-            $this->setName($array['buildingId']);
+        if (isset($array['id_building'])) {
+            $this->setName($array['id_building']);
         }
         if (isset($array['number'])) {
             $this->setWorkerId($array['number']);
@@ -94,8 +94,8 @@ class Room
         if (isset($array['floor'])) {
             $this->setFloor($array['floor']);
         }
-        if (isset($array['roomType'])) {
-            $this->setRoomType($array['roomType']);
+        if (isset($array['type'])) {
+            $this->settype($array['type']);
         }
 
         return $this;
@@ -137,25 +137,25 @@ class Room
     {
         $pdo = new \PDO(Config::get('db_dsn'), Config::get('db_user'), Config::get('db_pass'));
         if (! $this->getId()) {
-            $sql = "INSERT INTO room (buildingId, number, floor, roomType) VALUES (:buildingId, :number, :floor, :roomType)";
+            $sql = "INSERT INTO room (id_building, number, floor, type) VALUES (:id_building, :number, :floor, :type)";
             $statement = $pdo->prepare($sql);
             $statement->execute([
-                ':buildingId' => $this->getBuildingId(),
+                ':id_building' => $this->getBuildingId(),
                 ':number' => $this->getNumber(),
                 ':floor' => $this->getFloor(),
-                ':roomType' => $this->getRoomType(),
+                ':type' => $this->getType(),
  
             ]);
 
             $this->setId($pdo->lastInsertId());
         } else {
-            $sql = "UPDATE room SET buildingId = :buildingId, number = :number, floor = :floor, roomType = :roomType WHERE id = :id";
+            $sql = "UPDATE room SET id_building = :id_building, number = :number, floor = :floor, type = :type WHERE id = :id";
             $statement = $pdo->prepare($sql);
             $statement->execute([
-                ':buildingId' => $this->getBuildingId(),
+                ':id_building' => $this->getBuildingId(),
                 ':number' => $this->getNumber(),
                 ':floor' => $this->getFloor(),
-                ':roomType' => $this->getRoomType(),
+                ':type' => $this->getType(),
                 ':id' => $this->getId(),
             ]);
         }
@@ -174,6 +174,6 @@ class Room
         $this->setBuildingId(null);
         $this->setNumber(null);
         $this->setFloor(null);
-        $this->setRoomType(null);
+        $this->setType(null);
     }
 }

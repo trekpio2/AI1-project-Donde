@@ -6,14 +6,14 @@ use App\Service\Config;
 class Building
 {
     private ?int $id = null;
-    private ?string $name = null;
+    public ?string $name = null;
     private ?string $street = null;
     private ?string $number = null;
     private ?string $postCode = null;
     private ?string $city = null;
     private ?string $image = null;
-    private ?string $latitude = null;
-    private ?string $longitude = null;
+    public ?string $latitude = null;
+    public ?string $longitude = null;
 
     public function getId(): ?int
     {
@@ -223,10 +223,10 @@ class Building
                 ':number' => $this->getNumber(),
                 ':postCode' => $this->getPostCode(),
                 ':city' => $this->getCity(),
-                ':image' => $this->getImage(),
                 ':latitude' => $this->getLatitude(),
                 ':longitude' => $this->getLongitude(),
                 ':id' => $this->getId(),
+                ':image' => $this->getImage(),
             ]);
         }
     }

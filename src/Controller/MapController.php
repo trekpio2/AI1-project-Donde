@@ -11,53 +11,59 @@ class MapController
     public function indexAction(Templating $templating, Router $router): ?string
     {
         $buildings = Building::findAll();
-        $html = $templating->render('building/index.html.php', [
+        $html = $templating->render('map/index.html.php', [
             'buildings' => $buildings,
             'router' => $router,
         ]);
         return $html;
     }
 
-    public function createAction(?array $requestPost, Templating $templating, Router $router): ?string
+    public function createAction(?array $requestBuilding, Templating $templating, Router $router): ?string
     {
-        if ($requestPost) {
-            $post = Post::fromArray($requestPost);
-            // @todo missing validation
-            $post->save();
+        $buildings = Building::findAll();
 
-            $path = $router->generatePath('post-index');
+        if ($requestBuilding) {
+            $building = Building::fromArray($requestBuilding);
+            // @todo missing validation
+            $building->save();
+
+            $path = $router->generatePath('map-index');
             $router->redirect($path);
             return null;
         } else {
-            $post = new Post();
+            $building = new Building();
         }
 
-        $html = $templating->render('post/create.html.php', [
-            'post' => $post,
+        $html = $templating->render('map/create.html.php', [
+            'building' => $building,
+            'buildings' => $buildings,
             'router' => $router,
         ]);
         return $html;
     }
 
-    public function editAction(int $postId, ?array $requestPost, Templating $templating, Router $router): ?string
+    public function editAction(int $buildingId, ?array $requestBuilding, Templating $templating, Router $router): ?string
     {
-        $post = Post::find($postId);
-        if (! $post) {
-            throw new NotFoundException("Missing post with id $postId");
+        $building = Building::find($buildingId);
+        if (! $building) {
+            throw new NotFoundException("Missing building with id $buildingId");
         }
 
-        if ($requestPost) {
-            $post->fill($requestPost);
+        $buildings = Building::findAll();
+        
+        if ($requestBuilding) {
+            $building->fill($requestBuilding);
             // @todo missing validation
-            $post->save();
+            $building->save();
 
-            $path = $router->generatePath('post-index');
+            $path = $router->generatePath('map-show', ['id' => $building->getId()]);
             $router->redirect($path);
             return null;
         }
 
-        $html = $templating->render('post/edit.html.php', [
-            'post' => $post,
+        $html = $templating->render('map/edit.html.php', [
+            'building' => $building,
+            'buildings' => $buildings,
             'router' => $router,
         ]);
         return $html;
@@ -71,7 +77,7 @@ class MapController
             throw new NotFoundException("Missing post with id $buildingId");
         }
 
-        $html = $templating->render('building/show.html.php', [
+        $html = $templating->render('map/show.html.php', [
             'buildings' => $buildings,
             'building' => $building,
             'router' => $router,
@@ -79,15 +85,15 @@ class MapController
         return $html;
     }
 
-    public function deleteAction(int $postId, Router $router): ?string
+    public function deleteAction(int $buildingId, Router $router): ?string
     {
-        $post = Post::find($postId);
-        if (! $post) {
-            throw new NotFoundException("Missing post with id $postId");
+        $building = Building::find($buildingId);
+        if (! $building) {
+            throw new NotFoundException("Missing post with id $buildingId");
         }
 
-        $post->delete();
-        $path = $router->generatePath('post-index');
+        $building->delete();
+        $path = $router->generatePath('map-index');
         $router->redirect($path);
         return null;
     }

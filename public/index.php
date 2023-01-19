@@ -8,35 +8,34 @@ $router = new \App\Service\Router();
 
 $action = $_REQUEST['action'] ?? null;
 switch ($action) {
-    case 'building-index':
+    case 'map-index':
     case null:
-        //$controller = new \App\Controller\PostController();
         $controller = new \App\Controller\MapController();
         $view = $controller->indexAction($templating, $router);
         break;
-    case 'post-create':
-        $controller = new \App\Controller\PostController();
-        $view = $controller->createAction($_REQUEST['post'] ?? null, $templating, $router);
+    case 'map-create':
+        $controller = new \App\Controller\MapController();
+        $view = $controller->createAction($_REQUEST['building'] ?? null, $templating, $router);
         break;
-    case 'post-edit':
+    case 'map-edit':
         if (! $_REQUEST['id']) {
             break;
         }
-        $controller = new \App\Controller\PostController();
-        $view = $controller->editAction($_REQUEST['id'], $_REQUEST['post'] ?? null, $templating, $router);
+        $controller = new \App\Controller\MapController();
+        $view = $controller->editAction($_REQUEST['id'], $_REQUEST['building'] ?? null, $templating, $router);
         break;
-    case 'building-show':
+    case 'map-show':
         if (! $_REQUEST['id']) {
             break;
         }
         $controller = new \App\Controller\MapController();
         $view = $controller->showAction($_REQUEST['id'], $templating, $router);
         break;
-    case 'post-delete':
+    case 'map-delete':
         if (! $_REQUEST['id']) {
             break;
         }
-        $controller = new \App\Controller\PostController();
+        $controller = new \App\Controller\MapController();
         $view = $controller->deleteAction($_REQUEST['id'], $router);
         break;
     default:

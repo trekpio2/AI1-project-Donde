@@ -6,10 +6,12 @@ use App\Service\Config;
 class Worker
 {
     private ?int $id = null;
-    private ?int $roomId = null;
+    private ?int $id_room = null;
     private ?string $firstName = null;
     private ?string $lastName = null;
     private ?string $title = null;
+    private ?string $login = null;
+    private ?string $password = null;
 
 
     public function getId(): ?int
@@ -26,12 +28,12 @@ class Worker
 
     public function getRoomId(): ?int
     {
-        return $this->roomId;
+        return $this->id_room;
     }
 
-    public function setRoomId(?int $roomId): Worker
+    public function setRoomId(?int $id_room): Worker
     {
-        $this->roomId = $roomId;
+        $this->id_room = $id_room;
 
         return $this;
     }
@@ -85,8 +87,8 @@ class Worker
         if (isset($array['id']) && ! $this->getId()) {
             $this->setId($array['id']);
         }
-        if (isset($array['roomId'])) {
-            $this->setRoomId($array['roomId']);
+        if (isset($array['id_room'])) {
+            $this->setRoomId($array['id_room']);
         }
         if (isset($array['firstName'])) {
             $this->setFirstName($array['firstName']);
@@ -137,10 +139,10 @@ class Worker
     {
         $pdo = new \PDO(Config::get('db_dsn'), Config::get('db_user'), Config::get('db_pass'));
         if (! $this->getId()) {
-            $sql = "INSERT INTO worker (roomId, firstName, lastName, title) VALUES (:roomId, :firstName, :lastName, :title)";
+            $sql = "INSERT INTO worker (id_room, firstName, lastName, title) VALUES (:id_room, :firstName, :lastName, :title)";
             $statement = $pdo->prepare($sql);
             $statement->execute([
-                ':roomId' => $this->getRoomId(),
+                ':id_room' => $this->getRoomId(),
                 ':firstName' => $this->getFirstName(),
                 ':lastName' => $this->getLastName(),
                 ':title' => $this->getTitle(),
@@ -149,10 +151,10 @@ class Worker
 
             $this->setId($pdo->lastInsertId());
         } else {
-            $sql = "UPDATE worker SET roomId = :roomId, firstName = :firstName, lastName = :lastName, title = :title WHERE id = :id";
+            $sql = "UPDATE worker SET id_room = :id_room, firstName = :firstName, lastName = :lastName, title = :title WHERE id = :id";
             $statement = $pdo->prepare($sql);
             $statement->execute([
-                ':roomId' => $this->getRoomId(),
+                ':id_room' => $this->getRoomId(),
                 ':firstName' => $this->getFirstName(),
                 ':lastName' => $this->getLastName(),
                 ':title' => $this->getTitle(),
